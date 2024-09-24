@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Faro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="index-page">
+
+    <header>
+        <div id="date-time" class="date-time"></div>
+        <h1 class="logo-texto">El Faro</h1>
+        <img src="https://img.freepik.com/fotos-premium/afiche-plano-faro-luz-faro-oceano-marino-banner-nautico-anuncio-lugar-vacio-fondo-abstracto-vector-texto_999147-5575.jpg?w=1380" style="width: 100%; height: auto;" alt="Logotipo de El Faro">
+        <nav>
+            <ul>
+                <li><a href="noticias.html">Noticias Generales</a></li>
+                <li><a href="deportes.html">Deportes</a></li>
+                <li><a href="negocios.html">Negocios</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="agregar-articulo">
+            <h2>Agregar nuevo artículo</h2>
+            <form id="article-form">
+                <input type="text" id="article-title" placeholder="Título del artículo" required>
+                <input type="text" id="article-subtitle" placeholder="Subtítulo del artículo" required>
+                <input type="date" id="article-date" required>
+                <input type="text" id="article-source" placeholder="Fuente del artículo" required>
+                <input type="url" id="article-image" placeholder="URL de la imagen (opcional)">
+                <label for="article-description">Desarrollo del artículo:</label>
+                <textarea id="article-description" placeholder="Escribe el contenido del artículo" required></textarea>
+
+
+                <label for="article-section">Selecciona la sección:</label>
+                <select id="article-section" required>
+                    <option value="">Seleccionar</option>
+                    <option value="noticias">Noticias Generales</option>
+                    <option value="deportes">Deportes</option>
+                    <option value="negocios">Negocios</option>
+                </select>
+
+                <button type="submit">Agregar artículo</button>
+            </form>
+
+        </section>
+    </main>
+
+    <section>
+        <h3>Video</h3>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/x2T6a02qHcs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+        <h3>Audio</h3>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/episode/79UP02MLzePzhcfLwkNJlg?utm_source=generator" width="300" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    </section>
+
+    <section id="contacto">
+        <h2>Formulario de Contacto</h2>
+        <form id="contact-form">
+            <input type="text" id="contact-name" placeholder="Tu nombre" required>
+            <input type="email" id="contact-email" placeholder="Tu email" required>
+            <textarea id="contact-message" placeholder="Tu mensaje" required></textarea>
+            <button type="submit">Enviar mensaje</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>© 2024 El Faro. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Scripts movidos al final del body -->
+    <script>
+        // Función para mostrar la fecha y la hora
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = now.toLocaleDateString('es-CL', options);
+            const formattedTime = now.toLocaleTimeString('es-CL', { hour12: false });
+            document.getElementById('date-time').textContent = `${formattedDate}, ${formattedTime}`;
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        
+        
+        // Lógica para agregar artículos
+        document.getElementById('article-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const title = document.getElementById('article-title').value;
+            const subtitle = document.getElementById('article-subtitle').value;
+            const date = document.getElementById('article-date').value;
+            const source = document.getElementById('article-source').value;
+            const image = document.getElementById('article-image').value || ''; // Imagen opcional
+            const description = document.getElementById('article-description').value; // Obtener la descripción
+            const section = document.getElementById('article-section').value;
+
+            if (title && subtitle && date && source && description && section) {
+                let articles = JSON.parse(localStorage.getItem(section)) || [];
+                articles.push({ title, subtitle, date, source, image, description }); // Incluir la descripción aquí
+                localStorage.setItem(section, JSON.stringify(articles));
+
+                document.getElementById('article-form').reset();
+                alert("Artículo agregado correctamente.");
+                window.location.href = `${section}.html`; // Redirige a la página de la sección
+            } else {
+                alert("Por favor, completa todos los campos obligatorios.");
+            }
+        });
+
+
+
+        // Lógica para el formulario de contacto
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            if (name && email && message) {
+                alert(`Gracias por tu mensaje, ${name}. Hemos recibido tu mensaje: "${message}"`);
+                document.getElementById('contact-form').reset();
+            }
+        });
+    </script>
+
+</body>
+</html>
